@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Diario de MG</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+    <header class="cabecera">
+        <div class="caja-titulo">
+            <h1 class="rainbow-text">El Diario de MG</h1>
+        </div>
+        
+        <div class="controles-derecha">
+            <div class="caja-registro">
+                <button class="btn-registro" id="btn-registro">REGISTRO</button>
+                <label for="nombre">nombre :</label>
+                <input type="text" id="nombre">
+                <label for="contrasena">contrasena:</label>
+                <input type="password" id="contrasena">
+            </div>
+            <button id="btn-theme" class="btn-theme">modo oscuro</button>
+        </div>
+    </header>
+
+    <section id="caja-nuevo-post" class="caja-nuevo-post">
+        <h3>Crear un nuevo Post</h3>
+        <div class="input-grupo">
+            <label for="nuevo-titulo">Título:</label>
+            <input type="text" id="nuevo-titulo">
+        </div>
+        <div class="input-grupo">
+            <label for="nuevo-cuerpo">Cuerpo:</label>
+            <textarea id="nuevo-cuerpo" rows="3"></textarea>
+        </div>
+        <button id="btn-publicar" class="btn-publicar">PUBLICAR</button>
+    </section>
+
+    <main class="contenedor-posts" id="contenedor-posts">
+        <h2>POSTS</h2>
+        </main>
+
+    <footer class="pie-pagina-nuevo">
+        <div class="pie-izq">
+            <div class="suscripcion-texto">
+                <h3>Suscribite a mis posts</h3>
+                <p>Dejá tu mail para enterarte cada vez que publico algo nuevo.</p>
+            </div>
+            <div class="suscripcion-inputs">
+                <input type="email" id="email-suscripcion" placeholder="tu@email.com">
+                <button id="btn-suscribir" class="btn-suscribir">SUSCRIBIRSE</button>
+                <button id="btn-desuscribir" class="btn-desuscribir">Dar de baja</button>
+            </div>
+        </div>
+        <div class="suscripcion-copyright">
+            © 2026 El Diario de MG. Creado a papel y código.
+        </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+    
+    <script src="app.js"></script>
+</body>
+</html>

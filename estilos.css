@@ -1,0 +1,349 @@
+/* VARIABLES PARA EL MODO CLARO/OSCURO */
+:root {
+    --bg-color: #ffffff;
+    --text-color: #000000;
+    --border-color: #000000;
+    
+    --theme-btn-bg: #000000;
+    --theme-btn-text: #ffffff;
+    --theme-btn-border: #000000;
+}
+
+body.dark-mode {
+    --bg-color: #000000;
+    --text-color: #ffffff;
+    --border-color: #ffffff;
+    
+    --theme-btn-bg: #ffffff;
+    --theme-btn-text: #000000;
+    --theme-btn-border: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    padding: 30px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* --- CABECERA Y CONTROLES --- */
+.cabecera {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.caja-titulo {
+    border: 3px solid var(--border-color);
+    padding: 15px 25px;
+}
+
+.controles-derecha {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.caja-registro {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.caja-registro input {
+    border: 3px solid var(--border-color);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    padding: 10px;
+    outline: none;
+    width: 150px;
+}
+
+.btn-registro {
+    border: 3px solid #ff0000;
+    background-color: var(--bg-color);
+    color: #ff0000;
+    font-weight: bold;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.btn-registro:hover {
+    background-color: #ff0000;
+    color: #000000;
+}
+
+.btn-theme {
+    background-color: var(--theme-btn-bg);
+    color: var(--theme-btn-text);
+    border: 3px solid var(--theme-btn-border);
+    padding: 10px 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: 0.2s;
+}
+
+/* --- ADMIN PANEL (CREAR POST) --- */
+.caja-nuevo-post {
+    display: none;
+    border: 3px dashed var(--border-color);
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+body.admin-mode .caja-nuevo-post {
+    display: block;
+}
+
+.caja-nuevo-post h3 { margin-bottom: 15px; }
+
+.input-grupo {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.input-grupo input, .input-grupo textarea {
+    border: 3px solid var(--border-color);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    padding: 8px;
+    width: 400px;
+    outline: none;
+    resize: none;
+}
+
+.btn-publicar {
+    border: 3px solid #00aa00;
+    background-color: var(--bg-color);
+    color: #00aa00;
+    font-weight: bold;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+.btn-publicar:hover {
+    background-color: #00aa00;
+    color: #000000;
+}
+
+/* --- CONTENEDOR PRINCIPAL --- */
+.contenedor-posts {
+    border: 4px solid var(--border-color);
+    padding: 20px;
+    min-height: 500px;
+}
+.contenedor-posts h2 { margin-bottom: 20px; }
+
+/* --- EL POST --- */
+.post-individual {
+    border: 3px solid var(--border-color);
+    padding: 20px;
+    margin-bottom: 20px;
+    width: 95%;
+}
+
+.titulo-post {
+    font-size: 22px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Centra verticalmente el título y la fecha */
+}
+
+/* Aplicamos el subrayado solo al texto, para no subrayar la fecha y el botón */
+.texto-titulo {
+    text-decoration: underline;
+}
+
+/* Agrupamos la fecha y la cruz a la derecha */
+.controles-titulo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.fecha-post {
+    font-size: 14px; /* Letra más chica */
+    font-weight: bold; /* Negrita */
+}
+
+.texto-post { margin-bottom: 25px; }
+
+/* --- BOTONES DE BORRAR --- */
+.btn-borrar {
+    background: none;
+    border: none;
+    color: #ff0000;
+    cursor: pointer;
+    font-size: 16px;
+    display: none;
+}
+
+body.admin-mode .btn-borrar {
+    display: inline-block;
+}
+
+/* --- COMENTARIOS --- */
+.caja-comentarios {
+    border: 3px solid var(--border-color);
+    padding: 15px;
+    margin-bottom: 30px;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+}
+
+.caja-comentarios h4 { margin-bottom: 15px; font-weight: normal;}
+
+.caja-comentarios p {
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    border-bottom: 1px dotted var(--border-color);
+    width: fit-content;
+    max-width: 100%;
+}
+
+.caja-comentarios p:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+/* --- NUEVO COMENTARIO --- */
+.nuevo-comentario {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.input-comentario {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.input-comentario input, .input-comentario textarea {
+    border: 3px solid var(--border-color);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    padding: 8px;
+    width: 250px;
+    outline: none;
+}
+.input-comentario textarea { overflow: hidden; }
+
+.btn-comentar {
+    border: 3px solid #ff7f50;
+    background-color: var(--bg-color);
+    color: #ff7f50;
+    font-weight: bold;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.btn-comentar:hover {
+    background-color: #ff7f50;
+    color: #000000;
+}
+
+/* --- PIE DE PÁGINA --- */
+.pie-pagina-nuevo {
+    display: flex;
+    justify-content: space-between; 
+    align-items: flex-end; 
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 2px dashed var(--border-color); 
+}
+
+.pie-izq {
+    display: flex;
+    align-items: flex-end; 
+    gap: 40px; 
+}
+
+.suscripcion-texto {
+    display: flex;
+    flex-direction: column;
+}
+
+.suscripcion-texto h3 {
+    margin-bottom: 5px;
+    font-size: 18px;
+}
+
+.suscripcion-texto p {
+    font-style: italic;
+    font-size: 14px;
+}
+
+.suscripcion-inputs {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 2px; 
+}
+
+.suscripcion-inputs input {
+    border: 3px solid var(--border-color);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    padding: 8px;
+    width: 250px;
+    outline: none;
+}
+
+.btn-suscribir {
+    border: 3px solid #0000ff;
+    background-color: var(--bg-color);
+    color: #0000ff;
+    font-weight: bold;
+    padding: 8px 15px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-suscribir:hover {
+    background-color: #0000ff;
+    color: var(--bg-color);
+}
+
+.btn-desuscribir {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-desuscribir:hover {
+    color: #ff0000;
+}
+
+.suscripcion-copyright {
+    font-size: 12px;
+    text-align: right;
+    margin-bottom: 2px;
+}
+
+/* --- EFECTO ARCOÍRIS --- */
+@keyframes animacion-arcoiris {
+    0% { color: #ff0000; } 15% { color: #ff7f00; } 30% { color: #cccc00; } 
+    45% { color: #00aa00; } 60% { color: #0000ff; } 75% { color: #4b0082; } 
+    90% { color: #9400d3; } 100% { color: #ff0000; }
+}
+.rainbow-text { animation: animacion-arcoiris 5s linear infinite; font-weight: bold; }
