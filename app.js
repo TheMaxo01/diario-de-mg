@@ -11,7 +11,10 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// --- 2. ELEMENTOS DEL DOM ---
+// --- 2. INICIALIZAR EMAILJS ---
+emailjs.init("DQcHeeluoCB9YgFkz"); 
+
+// --- 3. ELEMENTOS DEL DOM ---
 const btnTheme = document.getElementById('btn-theme');
 const btnRegistro = document.getElementById('btn-registro');
 const inputNombreRegistro = document.getElementById('nombre');
@@ -24,7 +27,6 @@ const contenedorPosts = document.querySelector('.contenedor-posts');
 
 let esAdmin = false;
 
-// NUEVA FUNCIÓN DE HORA Y FECHA EXACTA
 function obtenerFechaHoraActual() {
     const ahora = new Date();
     const horas = ahora.getHours().toString().padStart(2, '0');
@@ -41,7 +43,7 @@ btnTheme.addEventListener('click', function() {
     btnTheme.textContent = document.body.classList.contains('dark-mode') ? "Modo claro" : "modo oscuro";
 });
 
-// --- SEGURIDAD: REGISTRO (ADMINISTRADOR) ---
+// SEGURIDAD: REGISTRO
 btnRegistro.addEventListener('click', function() {
     const nombreIngresado = inputNombreRegistro.value.trim();
     const contrasenaIngresada = inputContrasena.value.trim();
@@ -64,7 +66,7 @@ btnRegistro.addEventListener('click', function() {
     }
 });
 
-// --- 3. PUBLICAR UN POST ---
+// --- 4. PUBLICAR UN POST Y AVISAR A LOS SUSCRIPTORES ---
 btnPublicar.addEventListener('click', function() {
     const titulo = nuevoTitulo.value.trim();
     const cuerpo = nuevoCuerpo.value.trim();
@@ -78,7 +80,23 @@ btnPublicar.addEventListener('click', function() {
         }).then(() => {
             nuevoTitulo.value = "";
             nuevoCuerpo.value = "";
-            alert("¡Post publicado correctamente!");
+            alert("¡Post publicado correctamente! Enviando avisos...");
+
+            db.collection("suscriptores").get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    const emailSuscriptor = doc.data().email;
+                    
+                    emailjs.send("service_gzpqman", "template_lx3i8xk", {
+                        destinatario: emailSuscriptor,
+                        titulo: titulo
+                    }).then(() => {
+                        console.log("Aviso enviado a: " + emailSuscriptor);
+                    }).catch((error) => {
+                        console.error("Error al mandar mail a " + emailSuscriptor + ": ", error);
+                    });
+                });
+            });
+
         }).catch((error) => {
             alert("Error al publicar: " + error.message);
         });
@@ -87,7 +105,7 @@ btnPublicar.addEventListener('click', function() {
     }
 });
 
-// --- 4. LEER Y MOSTRAR POSTS EN TIEMPO REAL ---
+// --- 5. LEER Y MOSTRAR POSTS EN TIEMPO REAL ---
 db.collection("posts").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
     let htmlPosts = "<h2>POSTS</h2>";
 
@@ -95,7 +113,6 @@ db.collection("posts").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
         const post = doc.data();
         const postId = doc.id;
 
-        // Formateamos la fecha del Post sacada de Firebase
         let fechaPostFormateada = "Guardando..."; 
         if (post.timestamp) {
             const fecha = post.timestamp.toDate();
@@ -115,7 +132,6 @@ db.collection("posts").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
             });
         }
 
-        // Nueva estructura HTML del Post (Separando el título de la fecha y los controles)
         htmlPosts += `
             <article class="post-individual">
                 <h3 class="titulo-post">
@@ -150,10 +166,8 @@ db.collection("posts").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
     contenedorPosts.innerHTML = htmlPosts;
 });
 
-// --- 5. ACCIONES EN LOS POSTS ---
+// --- 6. ACCIONES EN LOS POSTS (Comentar y Borrar) ---
 document.body.addEventListener('click', function(e) {
-    
-    // COMENTAR
     if (e.target.classList.contains('btn-comentar')) {
         const postId = e.target.getAttribute('data-id');
         const article = e.target.closest('.post-individual');
@@ -165,18 +179,36 @@ document.body.addEventListener('click', function(e) {
         if (esAdmin) autor = "MG";
 
         if (texto !== "" && autor !== "") {
-            // Guardamos el comentario usando la nueva función de fecha y hora
-            const nuevoComentario = { texto: texto, autor: autor, hora: obtenerFechaHoraActual() };
+            const horaComentario = obtenerFechaHoraActual();
+            const nuevoComentario = { texto: texto, autor: autor, hora: horaComentario };
             
+            const tituloPost = article.querySelector('.texto-titulo').textContent;
+
             db.collection("posts").doc(postId).update({
                 comentarios: firebase.firestore.FieldValue.arrayUnion(nuevoComentario)
+            }).then(() => {
+                
+                // === NOTIFICACIÓN POR EMAIL AL ADMIN ===
+                emailjs.send("service_gzpqman", "template_0c1z29q", {
+                    post: tituloPost,
+                    comentario: texto,
+                    nombre: autor,
+                    hora: horaComentario
+                }).then(() => {
+                    console.log("Notificación de comentario enviada al administrador.");
+                }).catch((error) => {
+                    console.error("Error al enviar notificación al admin: ", error);
+                });
+                
             });
+
+            inputComentario.value = "";
+            inputComentario.style.height = 'auto';
         } else {
             alert("Escribí un comentario y asegurate de tener un nombre puesto.");
         }
     }
 
-    // BORRAR POST
     if (e.target.classList.contains('borrar-post')) {
         const postId = e.target.getAttribute('data-id');
         if (confirm("¿Seguro que querés borrar este post entero de la base de datos?")) {
@@ -184,11 +216,9 @@ document.body.addEventListener('click', function(e) {
         }
     }
 
-    // BORRAR COMENTARIO
     if (e.target.classList.contains('borrar-comentario')) {
         const postId = e.target.getAttribute('data-post-id');
         const index = e.target.getAttribute('data-comment-index');
-        
         db.collection("posts").doc(postId).get().then(doc => {
             let datos = doc.data();
             datos.comentarios.splice(index, 1);
@@ -205,7 +235,7 @@ document.body.addEventListener('input', function(e) {
     }
 });
 
-// --- 6. GESTIÓN DE SUSCRIPTORES ---
+// --- 7. GESTIÓN DE SUSCRIPTORES ---
 const inputEmail = document.getElementById('email-suscripcion');
 
 document.getElementById('btn-suscribir').addEventListener('click', function() {
