@@ -8,6 +8,7 @@
 </head>
 <body>
 
+    <!-- CABECERA -->
     <header class="cabecera">
         <div class="caja-titulo">
             <h1 class="rainbow-text">El Diario de MG</h1>
@@ -25,6 +26,7 @@
         </div>
     </header>
 
+    <!-- CAJA PARA CREAR NUEVOS POSTS -->
     <section id="caja-nuevo-post" class="caja-nuevo-post">
         <h3>Crear un nuevo Post</h3>
         <div class="input-grupo">
@@ -38,10 +40,12 @@
         <button id="btn-publicar" class="btn-publicar">PUBLICAR</button>
     </section>
 
+    <!-- CONTENIDO PRINCIPAL -->
     <main class="contenedor-posts" id="contenedor-posts">
         <h2>POSTS</h2>
-        </main>
+    </main>
 
+    <!-- PIE DE PÁGINA Y SUSCRIPCIÓN -->
     <footer class="pie-pagina-nuevo">
         <div class="pie-izq">
             <div class="suscripcion-texto">
@@ -59,11 +63,11 @@
         </div>
     </footer>
 
-<!-- LIBRERÍAS (Firebase y EmailJS) -->
+    <!-- LIBRERÍAS (Firebase y EmailJS) -->
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
     
-    <!-- ESTA ES LA LÍNEA QUE TE FALTA PARA QUE ENTIENDA QUÉ ES EMAILJS -->
+    <!-- LÍNEA AGREGADA: EMAILJS -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     
     <!-- NUESTRO CEREBRO -->
